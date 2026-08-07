@@ -34,7 +34,8 @@ def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
     
     print(f"[INFO] Initiating request to Copernicus CDS for North Sea datasets...")
     
-    # Target geographical area: North Sea bounding box [North, West, South, East]
+   # German North Sea offshore wind cluster bounding box: [North, West, South, East]
+
     north_sea_bounds = [60.0, -4.0, 50.0, 10.0]
     
     try:
@@ -43,7 +44,7 @@ def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
             {
                 'product_type': 'reanalysis',
                 'format': 'netcdf',
-                # 100m wind components are standard for modern offshore wind hub heights
+                # 100m --- hub height
                 'variable': [
                     '100m_u_component_of_wind', 
                     '100m_v_component_of_wind',
