@@ -44,7 +44,7 @@ def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
             {
                 'product_type': 'reanalysis',
                 'format': 'netcdf',
-                # 100m --- hub height
+                # 100m --- ~hub height
                 'variable': [
                     '100m_u_component_of_wind', 
                     '100m_v_component_of_wind',
