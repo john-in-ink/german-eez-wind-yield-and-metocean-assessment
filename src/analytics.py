@@ -9,6 +9,8 @@ Description: Master script orchestrating the scientific ingestion of Copernicus 
 import os
 import sys
 import logging
+import zipfile
+import glob
 import xarray as xr
 import pandas as pd
 import numpy as np
@@ -39,8 +41,24 @@ def run_production_pipeline() -> str:
         sys.exit(1)
         
     print(f"[INFO] Ingesting multi-dimensional spatial grid: {config.RAW_DATA_FILE}")
-    #ds = xr.open_dataset(config.RAW_DATA_FILE)
-    ds = xr.open_dataset(config.RAW_DATA_FILE, engine="netcdf4")
+    
+    # Check if the downloaded payload is actually a compressed zip folder archive
+    if zipfile.is_zipfile(config.RAW_DATA_FILE):
+        print("[INFO] Compressed multi-variable archive detected. Initiating extraction layer...")
+        extract_dir = os.path.join(os.path.dirname(config.RAW_DATA_FILE), "extracted_nc")
+        os.makedirs(extract_dir, exist_ok=True)
+        
+        with zipfile.ZipFile(config.RAW_DATA_FILE, 'r') as zip_ref:
+            zip_ref.extractall(extract_dir)
+            
+        nc_files = glob.glob(os.path.join(extract_dir, "*.nc"))
+        print(f"[INFO] Extracted {len(nc_files)} distinct component parameter files. Merging matrices...")
+        
+        # Open and merge all independent variable netcdf files into a single unified dataset
+        ds = xr.open_mfdataset(nc_files, engine="netcdf4", combine="by_coords")
+    else:
+        # Standard fallback if it downloads as an uncompressed standalone file
+        ds = xr.open_dataset(config.RAW_DATA_FILE, engine="netcdf4")
     
     # 2. Localized Spatial Slicing (Isolating the primary asset development point)
     target_lat = float(ds['latitude'].values[0] if ds['latitude'].ndim > 0 else ds['latitude'].values)
