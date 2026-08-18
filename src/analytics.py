@@ -42,7 +42,7 @@ def run_production_pipeline() -> str:
         
     print(f"[INFO] Ingesting multi-dimensional spatial grid: {config.RAW_DATA_FILE}")
     
-    # Check if the downloaded payload is actually a compressed zip folder archive
+    # Extract zip package if Copernicus bundled multiple parameters together
     if zipfile.is_zipfile(config.RAW_DATA_FILE):
         print("[INFO] Compressed multi-variable archive detected. Initiating extraction layer...")
         extract_dir = os.path.join(os.path.dirname(config.RAW_DATA_FILE), "extracted_nc")
@@ -53,19 +53,16 @@ def run_production_pipeline() -> str:
             
         nc_files = glob.glob(os.path.join(extract_dir, "*.nc"))
         print(f"[INFO] Extracted {len(nc_files)} distinct component parameter files. Merging matrices...")
-        
-        # Open and merge all independent variable netcdf files into a single unified dataset
         ds = xr.open_mfdataset(nc_files, engine="netcdf4", combine="by_coords")
     else:
-        # Standard fallback if it downloads as an uncompressed standalone file
         ds = xr.open_dataset(config.RAW_DATA_FILE, engine="netcdf4")
     
-    # 2. Localized Spatial Slicing (Isolating the primary asset development point)
-    target_lat = float(ds['latitude'].values[0] if ds['latitude'].ndim > 0 else ds['latitude'].values)
-    target_lon = float(ds['longitude'].values[0] if ds['longitude'].ndim > 0 else ds['longitude'].values)
+    # 2. Localized Spatial Slicing targeting your centralized German EEZ parameters
+    target_lat = getattr(config, 'TARGET_LAT', 54.65)
+    target_lon = getattr(config, 'TARGET_LON', 7.50)
     print(f"[INFO] Geofencing asset location coordinate: {target_lat}°N, {target_lon}°E")
     
-    # Slice the multi-dimensional dataset to prevent memory bloat
+    # Slice using nearest neighbor lookups to target your specific wind cluster node
     site_ds = ds.sel(latitude=target_lat, longitude=target_lon, method='nearest')
     
     # 3. Convert sliced spatial node to a localized production dataframe
@@ -92,16 +89,13 @@ def run_production_pipeline() -> str:
     
     # 5. Calculate Consolidated Metocean Yield & Accessibility Summaries
     print("[INFO] Evaluating wind farm localized performance indicators...")
-    hourly_winds = site_df['Wind_Speed_Hub_ms'].values
-    
-    # Universal timeframe adaptation: Dynamically query total hours available from the dataset
     simulated_hours = len(site_df)
     
     gross_theoretical_gwh = (site_df['Farm_Gross_Power_MW'].sum()) / 1000.0
     cumulative_loss_pct = 17.0  # 17% industrial loss penalty baseline
     net_energy_to_grid_gwh = gross_theoretical_gwh * (1.0 - (cumulative_loss_pct / 100.0))
     
-    # Dynamic capacity factor divisor calculation based on dataset size
+    # Dynamic capacity factor calculation based on dataset size
     max_theoretical_energy_gwh = (total_turbines * 15.0 * simulated_hours) / 1000.0
     net_capacity_factor_pct = (net_energy_to_grid_gwh / max_theoretical_energy_gwh) * 100.0 if max_theoretical_energy_gwh > 0 else 0.0
     
@@ -141,11 +135,33 @@ def run_production_pipeline() -> str:
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
     output_csv = os.path.join(config.OUTPUT_DIR, "german_bight_asset_yield_metrics.csv")
     print(f"[SUCCESS] Exporting production flat data matrix to: {output_csv}")
+    site_df.to_csv(output_csv, index=False)
     
-    columns_to_export = ['Timestamp', 'Wind_Speed_Hub_ms', 'Turbine_Power_MW', 'Farm_Gross_Power_MW', 'Modeled_Hs_m']
-    site_df[columns_to_export].to_csv(output_csv, index=False)
-    print("Pipeline Execution Completed Successfully.\n")
+    # 9. Dynamic Automation of the Executive Yield Summary Document Report
+    output_report = os.path.join(config.OUTPUT_DIR, "EXECUTIVE_YIELD_REPORT.md")
+    print(f"[INFO] Compiling dynamic markdown asset report briefing at: {output_report}")
     
+    report_content = f"""# German EEZ Offshore Asset Assessment Executive Report
+
+## 📊 Consolidated Asset Performance Indicators (KPIs)
+
+| Commercial Assessment Vector | Quantitative Value | Operational Engineering Impact / Risk Parameter |
+| :--- | :--- | :--- |
+| **Gross Generation Potential** | **{gross_theoretical_gwh:.2f} GWh** | Theoretical continuous power curve output before wake/electrical drag. |
+| **Cumulative System Deficit** | **{cumulative_loss_pct:.1f} %** | Piecewise engineering deduction factoring arrays, wakes, and downtime loops. |
+| **True Commercial Net Yield** | **{net_energy_to_grid_gwh:.2f} GWh** | Bankable production volume expected at the onshore transformation node. |
+| **Net Farm Capacity Factor** | **{net_capacity_factor_pct:.1f} %** | Macro-scale asset performance classification reflecting deepwater arrays. |
+| **Levelized Cost of Energy** | **€{lcoe:.2f} /MWh** | Competitive operational LCOE baseline optimized to North Sea thresholds. |
+| **Asset Payback Period** | **{payback_period:.1f} Years** | Capital amortization horizon based on standard market valuation assumptions. |
+
+## 🚢 Marine Logistics & Operations Access Envelopes
+* **CTV Access (Hs <= 1.5m):** Safer traditional boat transfers are viable **{ctv_acc:.1f}%** of the current data scope.
+* **SOV Access (Hs <= 2.5m):** Motion-compensated gangway walk-to-work systems expand viability to **{sov_acc:.1f}%**.
+"""
+    with open(output_report, "w", encoding="utf-8") as rf:
+        rf.write(report_content)
+
+    print("Pipeline Execution Completed Successfully with automated documentation compile.\n")
     return output_csv
 
 if __name__ == "__main__":
