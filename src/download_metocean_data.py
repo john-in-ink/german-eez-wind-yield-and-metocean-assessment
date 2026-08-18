@@ -26,7 +26,7 @@ def get_api_client():
         
     return cdsapi.Client()
 
-def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
+def download_era5_metocean_data(output_path="data/german_bight_metocean_raw.nc"):
     """
     Requests and downloads wind and wave datasets for the specified North Sea bounding box.
     """
@@ -34,8 +34,7 @@ def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
     
     print(f"[INFO] Initiating request to Copernicus CDS for North Sea datasets...")
     
-   # German North Sea offshore wind cluster bounding box: [North, West, South, East]
-
+    # German North Sea offshore wind cluster bounding box: [North, West, South, East]
     north_sea_bounds = [60.0, -4.0, 50.0, 10.0]
     
     try:
@@ -51,8 +50,8 @@ def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
                     'significant_height_of_combined_wind_waves_and_swell',
                     'mean_wave_period'
                 ],
-                'year': ['2024', '2025'],
-                'month': [f"{i:02d}" for i in range(1, 12 + 1)],
+                'year': ['2025'],
+                'month': ['01'],
                 'day': [f"{i:02d}" for i in range(1, 31 + 1)],
                 'time': [f"{i:02d}:00" for i in range(0, 24)],
                 'area': north_sea_bounds,
@@ -68,4 +67,3 @@ def download_era5_metocean_data(output_path="data/north_sea_metocean_raw.nc"):
 if __name__ == "__main__":
     # Ensure the script executes properly when called directly from the command line
     download_era5_metocean_data()
-
