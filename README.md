@@ -89,7 +89,7 @@ This project is built using Python 3.10+ and depends on production-grade geospat
 
 ### 2. Configure Credentials and Execute Data Pipelines
 
-    export CDSAPI_URL="https://copernicus.eu"
+    export CDSAPI_URL="https://cds.climate.copernicus.eu/api"
     export CDSAPI_KEY="your_private_uid_and_key_here"
 
     # Run automated data acquisition, then calculate site yield and statistics
