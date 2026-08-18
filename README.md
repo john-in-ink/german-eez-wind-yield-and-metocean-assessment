@@ -1,33 +1,30 @@
-# German EEZ Offshore Wind Yield and Metocean Engineering Assessment
+# German EEZ Offshore Wind Yield & Metocean Engineering Assessment
 
-Asset Array: 630 MW Deepwater Array (42 x 15MW Reference Nodes)
-Geographic Domain: German EEZ / North Sea Bight
-Regulatory Design Baselines: BSH Standards
+**Asset Array:** 630 MW Deepwater Array (42 x 15MW Reference Nodes)  
+**Geographic Domain:** German EEZ / North Sea Bight  
+**Regulatory Design Baselines:** BSH (Federal Maritime and Hydrographic Agency) Standards  
 
-An end-to-end site suitability and yield assessment suite bridging multi-dimensional atmospheric and oceanography reanalysis datasets with bankable project financials. This repository serves as a professional portfolio project demonstrating advanced production capabilities in Wind Resource Assessment, Metocean Engineering, and Asset Optimization Architecture.
-
----
-
-## Consolidated Asset Performance Indicators (KPIs)
-
-The main execution pipeline programmatically generates the following core performance matrix for the target deployment node:
-
-| Commercial Assessment Vector | Quantitative Value | Operational Engineering Impact / Risk Parameter |
-| :--- | :--- | :--- |
-| **Gross Generation Potential** | **1,514.86 GWh/a** | Theoretical continuous power curve output before wake/electrical drag. |
-| **Cumulative System Deficit** | **17.0 %** | Piecewise engineering deduction factoring arrays, wakes, and downtime loops. |
-| **True Commercial Net Yield** | **1,257.33 GWh/a** | Bankable production volume expected at the onshore transformation node. |
-| **Net Farm Capacity Factor** | **54.4 %** | Macro-scale asset performance classification reflecting deepwater arrays. |
-| **Levelized Cost of Energy** | **€48.24 /MWh** | Competitive operational LCOE baseline optimized to North Sea thresholds. |
-| **Asset Payback Period** | **6.4 Years** | Capital amortization horizon based on standard market valuation assumptions. |
+An end-to-end site suitability and yield assessment suite bridging multi-dimensional atmospheric and oceanography reanalysis datasets with bankable project financials. This repository serves as a professional portfolio project demonstrating advanced production capabilities in **Wind Resource Assessment**, **Metocean Engineering**, and **Asset Optimization Architecture**.
 
 ---
 
-## Key Analytical Engineering Modules
+## 📋 Pipeline Automated Deliverables & Reporting
+
+Instead of relying on static documentation, the execution pipeline programmatically calculates your assessment criteria and generates turnkey outputs directly inside your workspace:
+
+*   📊 **Dynamic KPI Matrix:** Automatically extracts and evaluates Gross Generation, Cumulative System Deficits (Wake/Electrical/Downtime), True Commercial Net Yield, Net Farm Capacity Factors, Levelized Cost of Energy (LCOE), and Capital Payback Periods based entirely on the length of your ingested dataset.
+*   📜 **Automated Executive Briefing:** Writes a live, markdown-formatted report directly to `outputs/EXECUTIVE_YIELD_REPORT.md` every time the pipeline finishes running.
+*   🎨 **7-Panel Visual Audit Dashboard:** Generates 7 high-resolution verification figures to cross-examine core wind boundary layer logs, 15MW aerodynamic profiles, marine vessel access boundaries, Gumbel return intervals, catenary configurations, and seabed slope hazards.
+
+---
+
+## 🧱 Key Analytical Engineering Modules
 
 ### 1. Data Acquisition Pipeline (src/download_metocean_data.py)
 * Automated Climate Downloads: Handles the systematic download of historical ERA5 climate reanalysis datasets directly from the Copernicus Climate Data Store (CDS). It pulls multi-component wind velocity data and wave parameters across a geofenced North Sea marine cluster bounding box.
 * It pulls multi-component wind velocity data and wave parameters across a geofenced North Sea marine cluster bounding box.
+
+. It pulls multi-component wind velocity data and wave parameters across a geofenced North Sea marine cluster bounding box.
 
 ### 2. Atmospheric Boundary Layer Physics and Aerodynamics (src/utils.py)
 - Logarithmic Extrapolation: Scales raw Copernicus multi-component velocity vectors from the 100m reference standard up to the target 150m hub height using the Log Wind Profile law, parameterized for open-sea roughness paths (z0 = 0.0002m).
@@ -50,7 +47,7 @@ Visual Verification Suite: Automatically generates exactly 7 distinct high-resol
 
 ---
 
-## Production Repository Topology
+## 📂 Production Repository Topology
 ```text
 german-eez-wind-yield-and-metocean-assessment/
 ├── LICENSE                     # MIT License specification text
@@ -66,7 +63,7 @@ german-eez-wind-yield-and-metocean-assessment/
 │   └── EXECUTIVE_YIELD_REPORT.md             # Pipeline-generated markdown report briefing
 └── src/
     ├── __init__.py             # Namespace declaration
-    ├── analytics.py            # Primary pipeline execution engine
+    ├── analytics.py            # Primary pipeline calculation engine
     ├── config.py               # Centralized site configurations and constants
     ├── download_metocean_data.py # Automated CDS data acquisition script
     ├── plots.py                  # 7-panel visual graphic plotting suite
@@ -74,7 +71,7 @@ german-eez-wind-yield-and-metocean-assessment/
 ```
 ---
 
-## Environment Provisioning and Pipeline Execution
+## ⚙️ Environment Provisioning & Pipeline Execution
 
 This project is built using Python 3.10+ and scales dynamically based on the dataset size. For rapid verification and testing, the acquisition framework is pre-configured to download January 2025 data. However, the calculation pipelines are completely universal and will process single-month test files or multi-decade resource baselines seamlessly.
 
@@ -99,5 +96,5 @@ Upon successful execution, the master module will log progress across all layers
 
 ---
 
-## License
+## 📄 License
 This project is open-source software licensed under the MIT License.
