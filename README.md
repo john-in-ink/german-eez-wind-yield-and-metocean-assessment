@@ -25,19 +25,22 @@ The main execution pipeline programmatically generates the following core perfor
 
 ## 🧱 Key Analytical Engineering Modules
 
-### 1. Atmospheric Boundary Layer Physics & Aerodynamics (`src/utils.py`)
+### 1. Data Ingestion & API Access Pipeline (`src/download_metocean_data.py`)
+*   **Copernicus Client Integration:** Automates secure retrieval of historical NetCDF datasets via the Copernicus Climate Data Store (CDS) API. It queries 100m wind vectors and significant wave metrics across a custom spatial bounding box geofenced to North Sea engineering sectors.
+
+### 2. Atmospheric Boundary Layer Physics & Aerodynamics (`src/utils.py`)
 *   **Logarithmic Extrapolation:** Scales raw Copernicus multi-component velocity vectors (u_100m, v_100m) from the 100m reference standard up to the target 150m hub height using the Log Wind Profile law, parameterized for open-sea roughness paths (z0 = 0.0002m).
 *   **Quadratic Spline Coupling:** Passes continuous hub velocity records into a localized high-order mathematical power curve array. Transitioning from coarse linear mapping to quadratic interpolation prevents artificial energy overestimations during the critical wind speed ramp-up window (3.0 to 11.0 m/s).
 
-### 2. Metocean Transport Logistics & Marine Accessibility
+### 3. Metocean Transport Logistics & Marine Accessibility
 *   **Wave Shear Modeling:** Generates correlated multi-year time-series significant wave heights (Hs) using an empirical fluid shear stress framework linked directly to kinetic wind gradients.
 *   **Vessel Operating Windows:** Computes exact safe transfer capabilities across the calendar year. Establishes that standard Crew Transfer Vessels (Hs <= 1.5m) achieve **71.2%** operational clearance, while heavy Walk-to-Work Service Operation Vessels (Hs <= 2.5m) expand access windows to **93.8%**.
 
-### 3. Extreme Value Statistics & Survival Limits
+### 4. Extreme Value Statistics & Survival Limits
 *   **Gumbel Distribution Fitting:** Extracts annual hydrographic maxima to fit extreme value right-skewed parametric boundaries.
 *   **50-Year Design Limits (H50):** Extrapolates the critical 50-year return period significant wave height threshold to establish explicit structural Ultimate Limit State (ULS) baselines for floating platform survivability.
 
-### 4. Marine Geotechnical & Layout Mechanics
+### 5. Marine Geotechnical & Layout Mechanics
 *   **Subsea Gradient Analysis:** Applies spatial central differences across a digital elevation matrix (DEM) to calculate local seafloor slope gradients, automatically flagging cable burial plow geometric hazard alerts.
 *   **Catenary Mooring Profiles:** Solves hyperbolic cosine static equilibrium mechanics (z = a * cosh(x/a) - a) to accurately chart mooring line tension profiles and platform station-keeping limits under subsea deadweight stresses.
 
@@ -48,10 +51,9 @@ The main execution pipeline programmatically generates the following core perfor
 ```text
 german-eez-wind-yield-and-metocean-assessment/
 ├── requirements.txt            # Explicit dependency version locks
-├── config.py                   # Centralized site configurations & constants
 ├── README.md                   # Primary portfolio documentation page
 ├── data/
-│   └── raw/                    # Multi-dimensional spatial Copernicus NetCDF source files
+│   └── north_sea_metocean_raw.nc # Downloaded raw NetCDF spatial array file
 ├── notebooks/
 │   └── yield_and_metocean_plots.ipynb  # Verification visualizations & analytical plots
 ├── outputs/
@@ -60,6 +62,8 @@ german-eez-wind-yield-and-metocean-assessment/
 └── src/
     ├── __init__.py             # Namespace declaration
     ├── analytics.py            # Primary pipeline execution engine
+    ├── config.py               # Centralized site configurations & constants
+    ├── download_metocean_data.py # Automated API data ingestion script
     └── utils.py                # Core engineering mathematical library
 ```
 
@@ -83,13 +87,18 @@ source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Execute Data Analytics Engine
-Run the master analytics orchestration script to parse multi-dimensional array coordinates, scale atmospheric metrics, map turbine production levels, and output reporting files:
+### 2. Configure Credentials and Execute Data Pipelines
+Set up your system environment tokens for the Copernicus Climate Data Store interface, run data ingestion, and then fire the analytical matrix scripts:
 ```bash
+export CDSAPI_URL="https://copernicus.eu"
+export CDSAPI_KEY="your_private_uid_and_key_here"
+
+# Execute data download, then calculate site yield and statistics
+python src/download_metocean_data.py
 python src/analytics.py
 ```
 
-Upon successful execution, the pipeline will log progress directly to the terminal console, export a clean `german_bight_asset_yield_metrics.csv` data structure to the `/outputs` folder, and write an updated `EXECUTIVE_YIELD_REPORT.md` file.
+Upon successful execution, the pipeline will log progress directly to the terminal console, export a clean data structure to your `/data` folder, and write an updated `EXECUTIVE_YIELD_REPORT.md` file.
 
 ---
 
