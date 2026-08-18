@@ -20,6 +20,10 @@ LAT_SOUTH = 53.3
 LON_WEST = 6.0
 LON_EAST = 9.0
 
+# Centered engineering node coordinates representing the asset location inside the German EEZ box
+TARGET_LAT = 54.65
+TARGET_LON = 7.50
+
 # ==============================================================================
 # 2. TURBINE TECHNICAL CONFIGURATION (Reference: Generic 15MW Offshore Turbine)
 # ==============================================================================
@@ -47,4 +51,3 @@ LOSS_FACTORS = {
 
 # Calculated total efficiency coefficient remaining (Multiplying out the remaining energy)
 # (1 - 0.08) * (1 - 0.03) * (1 - 0.04) * (1 - 0.02) = ~0.839 (approx. 16.1% to 17% loss)
-
