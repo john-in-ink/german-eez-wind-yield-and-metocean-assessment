@@ -48,23 +48,25 @@ The main execution pipeline programmatically generates the following core perfor
 
 ## 📂 Production Repository Topology
 
+```text
 german-eez-wind-yield-and-metocean-assessment/
-├── LICENSE                     # MIT License specification text
-├── requirements.txt            # Explicit dependency version locks
-├── README.md                   # Primary portfolio documentation page
-├── data/
-│   └── north_sea_metocean_raw.nc # Downloaded raw NetCDF spatial array file
-├── notebooks/
-│   └── yield_and_metocean_plots.ipynb  # Verification visualizations & analytical plots
-├── outputs/
-│   ├── german_bight_asset_yield_metrics.csv  # Sliced engineering flat files
-│   └── EXECUTIVE_YIELD_REPORT.md             # Pipeline-generated briefing report
-└── src/
-    ├── __init__.py             # Namespace declaration
-    ├── analytics.py            # Primary pipeline execution engine
-    ├── config.py               # Centralized site configurations & constants
-    ├── download_metocean_data.py # Automated CDS reanalysis data download script
-    └── utils.py                # Core engineering mathematical library
+  ├── LICENSE                         # MIT License specification text
+  ├── requirements.txt                # Explicit dependency version locks
+  ├── README.md                       # Primary portfolio documentation page
+  ├── data/
+  │     └── north_sea_metocean_raw.nc # Downloaded raw NetCDF spatial array file
+  ├── notebooks/
+  │     └── yield_and_metocean_plots.ipynb # Verification plots
+  ├── outputs/
+  │     ├── german_bight_asset_yield_metrics.csv # Sliced data flat files
+  │     └── EXECUTIVE_YIELD_REPORT.md      # Pipeline-generated briefing report
+  └── src/
+        ├── __init__.py               # Namespace declaration
+        ├── analytics.py              # Primary pipeline execution engine
+        ├── config.py                 # Centralized site configurations & constants
+        ├── download_metocean_data.py # Automated data download script
+        └── utils.py                  # Core engineering mathematical library
+```
 
 ---
 
