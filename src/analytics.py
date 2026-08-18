@@ -39,7 +39,8 @@ def run_production_pipeline() -> str:
         sys.exit(1)
         
     print(f"[INFO] Ingesting multi-dimensional spatial grid: {config.RAW_DATA_FILE}")
-    ds = xr.open_dataset(config.RAW_DATA_FILE)
+    #ds = xr.open_dataset(config.RAW_DATA_FILE)
+    ds = xr.open_dataset(config.RAW_DATA_FILE, engine="netcdf4")
     
     # 2. Localized Spatial Slicing (Isolating the primary asset development point)
     target_lat = float(ds['latitude'].values[0] if ds['latitude'].ndim > 0 else ds['latitude'].values)
