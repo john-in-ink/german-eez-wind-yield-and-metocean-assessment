@@ -90,7 +90,7 @@ This project is built using Python 3.10+ and scales dynamically based on the dat
 
 To trigger the data acquisition layer, calculate physics variables, compile the markdown commercial summary, and generate all 7 diagnostic figures in sequence, run the master orchestrator file:
 
-    CDSAPI_URL="https://cds.climate.copernicus.eu/api"
+    export CDSAPI_URL="https://cds.climate.copernicus.eu/api"
     export CDSAPI_KEY="your_private_uid_and_key_here"
 
     python main.py
